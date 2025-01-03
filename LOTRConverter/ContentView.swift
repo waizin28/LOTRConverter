@@ -100,17 +100,25 @@ struct ContentView: View {
                 HStack {
                     Spacer()
                     Button {
+                        // true ExchangeInfo Screen active
                         showExchangeInfo.toggle()
                         
                     } label : {
                         Image(systemName: "info.circle.fill")
                             .font(.largeTitle)
                             .foregroundStyle(.white)
-                    }.padding(.trailing)
+                    }
+                    .padding(.trailing)
+                    
                 }
                 
                     
             }
+        }.sheet(isPresented: $showExchangeInfo){
+            // this sheet modifier can be attach anywhere
+            // sheet modifier watches the showEchangeInfo property
+            // and when true, show ExchangeInfo sheet
+            ExchangeInfo()
         }
     }
 }
