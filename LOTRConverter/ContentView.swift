@@ -14,6 +14,8 @@ struct ContentView: View {
     // var = property can change
     // Property Wrapper -> allow this poperty to change state of view
     @State var showExchangeInfo = false
+    @State var leftCurrencyAmount = ""
+    @State var rightCurrencyAmount = ""
     
     var body: some View {
         ZStack{
@@ -52,10 +54,11 @@ struct ContentView: View {
                             Text("Silver Piece")
                                 .font(.headline)
                                 .foregroundStyle(.white)
-                        }
+                        }.padding(.bottom,-5)
                         
-                        // Text Field
-                        Text("Text Field")
+                        // Text Field, 2 way data bindining
+                        TextField("Amount", text: $leftCurrencyAmount)
+                            .textFieldStyle(.roundedBorder)
                     }
                     
                     // Equal Sign
@@ -78,12 +81,18 @@ struct ContentView: View {
                                 .resizable()
                                 .scaledToFit()
                                 .frame(height: 33)
-                        }
+                            
+                        }.padding(.bottom,-5)
                         
                         // Text Field
-                        Text("Text Field")
+                        TextField("Amount", text: $rightCurrencyAmount)
+                            .textFieldStyle(.roundedBorder)
+                            .multilineTextAlignment(.trailing)
                     }
                 }
+                .padding()
+                .background(.black.opacity(0.5))
+                .clipShape(.capsule)
                 
                 Spacer()
                 
