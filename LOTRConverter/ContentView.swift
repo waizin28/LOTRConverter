@@ -72,12 +72,6 @@ struct ContentView: View {
                         TextField("Amount", text: $leftCurrencyAmount)
                             .textFieldStyle(.roundedBorder)
                             .focused($leftTyping) //when user typing, leftTyping will be true
-                            .onChange(of: leftCurrencyAmount) {
-                                if leftTyping == true{
-                                    rightCurrencyAmount = leftCurrency.convert( leftCurrencyAmount, to: rightCurrency)
-                                } //if user is typing in left field,
-                                // update right text field
-                            }
                     }
                     
                     // Equal Sign
@@ -112,17 +106,13 @@ struct ContentView: View {
                             .textFieldStyle(.roundedBorder)
                             .multilineTextAlignment(.trailing)
                             .focused($rightTyping)
-                            .onChange(of: rightCurrencyAmount) {
-                                if rightTyping {
-                                    leftCurrencyAmount = rightCurrency.convert( rightCurrencyAmount, to: leftCurrency)
-                                } // if user typing on right text field,
-                                // update left text field
-                            }
+                        
                     }
                 }
                 .padding()
                 .background(.black.opacity(0.5))
                 .clipShape(.capsule)
+                .keyboardType(.decimalPad)
                 
                 Spacer()
                 
@@ -144,6 +134,27 @@ struct ContentView: View {
                 
                     
             }
+        }
+        .onChange(of: leftCurrencyAmount) {
+            if leftTyping == true{
+                rightCurrencyAmount = leftCurrency.convert( leftCurrencyAmount, to: rightCurrency)
+            } //if user is typing in left field,
+            // update right text field
+        }
+        .onChange(of: rightCurrencyAmount) {
+            if rightTyping {
+                leftCurrencyAmount = rightCurrency.convert( rightCurrencyAmount, to: leftCurrency)
+            } // if user typing on right text field,
+            // update left text field
+        }
+        .onChange(of: leftCurrency){
+            // when left leftCurrency changes -> update left amount
+            // property
+            leftCurrencyAmount = rightCurrency.convert( rightCurrencyAmount, to: leftCurrency)
+        }
+        .onChange(of: rightCurrency){
+            // changes right currency amount
+            rightCurrencyAmount = leftCurrency.convert( leftCurrencyAmount, to: rightCurrency)
         }
         .sheet(isPresented: $showExchangeInfo){
             // this sheet modifier can be attach anywhere
