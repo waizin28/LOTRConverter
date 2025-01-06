@@ -18,9 +18,11 @@ struct ContentView: View {
     @State var leftCurrencyAmount = ""
     @State var rightCurrencyAmount = ""
     
-    
     @State var leftCurrency: Currency = .silverPiece
     @State var rightCurrency: Currency = .goldPiece
+    
+    @FocusState var leftTyping
+    @FocusState var rightTyping
     
     var body: some View {
         ZStack{
@@ -69,6 +71,13 @@ struct ContentView: View {
                         // Text Field, 2 way data bindining
                         TextField("Amount", text: $leftCurrencyAmount)
                             .textFieldStyle(.roundedBorder)
+                            .focused($leftTyping) //when user typing, leftTyping will be true
+                            .onChange(of: leftCurrencyAmount) {
+                                if leftTyping == true{
+                                    rightCurrencyAmount = leftCurrency.convert( leftCurrencyAmount, to: rightCurrency)
+                                } //if user is typing in left field,
+                                // update right text field
+                            }
                     }
                     
                     // Equal Sign
@@ -102,6 +111,13 @@ struct ContentView: View {
                         TextField("Amount", text: $rightCurrencyAmount)
                             .textFieldStyle(.roundedBorder)
                             .multilineTextAlignment(.trailing)
+                            .focused($rightTyping)
+                            .onChange(of: rightCurrencyAmount) {
+                                if rightTyping {
+                                    leftCurrencyAmount = rightCurrency.convert( rightCurrencyAmount, to: leftCurrency)
+                                } // if user typing on right text field,
+                                // update left text field
+                            }
                     }
                 }
                 .padding()
