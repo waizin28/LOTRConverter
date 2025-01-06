@@ -9,7 +9,8 @@ import SwiftUI
 
 struct SelectCurrency: View {
     @Environment(\.dismiss) var dimissExchangeInfo
-    @State var currencySelected: Currency
+    @State var topCurrency: Currency
+    @State var bottomCurrency: Currency
    
     var body: some View {
         ZStack {
@@ -26,32 +27,15 @@ struct SelectCurrency: View {
                     .fontWeight(.bold)
                 
                 // Currency icons
-                LazyVGrid(columns: [GridItem(), GridItem(), GridItem()]){
-                    ForEach(Currency.allCases){ currency in
-                        if currency == currencySelected {
-                            CurrencyIcon(currencyImage: currency.image, currencyName: currency.name)
-                                .shadow(color: .black, radius: 10)
-                                .overlay{
-                                    RoundedRectangle(cornerRadius: 25)
-                                        .stroke(lineWidth: 3)
-                                        .opacity(0.5)
-                                }
-                        }else{
-                            CurrencyIcon(currencyImage: currency.image, currencyName: currency.name)
-                                .onTapGesture {
-                                    currencySelected = currency
-                                }
-                        }
-                    }
-                }
+                IconGrid(currencySelected: topCurrency)
                 
                 // Text
                 Text("Select the currency you would like to convert to:")
                     .fontWeight(.bold)
+                    .padding(.top)
                     
-                
                 // Currency icons
-                
+                IconGrid(currencySelected: bottomCurrency)
                 
                 // Done Button
                 Button("Done"){
@@ -65,10 +49,11 @@ struct SelectCurrency: View {
             }
             .padding()
             .multilineTextAlignment(.center)
+            .foregroundStyle(.black)
         }
     }
 }
 
 #Preview {
-    SelectCurrency(currencySelected: .silverPenny)
+    SelectCurrency(topCurrency: .silverPenny, bottomCurrency: .goldPenny)
 }
